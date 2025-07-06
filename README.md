@@ -69,6 +69,25 @@ We provide several options to download this dataset:
 
 The script `loaddata.py` provides a simple way to load the data via Pandas in Python.
 
+### Loading `kuairec_caption_category.csv`
+
+The file `kuairec_caption_category.csv` contains very wide text fields padded
+with spaces. The default C engine of `pandas.read_csv` cannot parse it
+reliably and raises a `ParserError`. Use the Python engine instead:
+
+```python
+import pandas as pd
+
+caption_cat = pd.read_csv(
+    "kuairec_caption_category.csv",  # path under the `data/` folder
+    engine="python",                 # Python parser handles long lines
+    skipinitialspace=True,            # ignore extra spaces after commas
+    na_values=["UNKNOWN", "[]", "NaN"],  # treat placeholders as missing
+    keep_default_na=False,
+)
+caption_cat = caption_cat.fillna("")
+```
+
 ---
 
 ## Data Descriptions
